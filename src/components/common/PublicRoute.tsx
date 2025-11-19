@@ -1,12 +1,15 @@
-import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-interface ProtectedRouteProps {
+interface PublicRouteProps {
   children: React.ReactNode;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+/**
+ * Rutas públicas que redirigen al dashboard si el usuario ya está autenticado
+ * Usado para /login y /register
+ */
+export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
@@ -17,8 +20,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
