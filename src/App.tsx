@@ -12,6 +12,7 @@ import { Tasks } from './pages/Tasks';
 import { TaskDetail } from './pages/TaskDetail';
 import { Team } from './pages/Team';
 import { Profile } from './pages/Profile';
+import { NotFound } from './pages/NotFound';
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
             }
           />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
       </AuthProvider>
