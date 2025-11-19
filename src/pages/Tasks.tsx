@@ -6,6 +6,7 @@ import { TaskCard } from '../components/tasks/TaskCard';
 import { TaskForm } from '../components/tasks/TaskForm';
 import { Modal } from '../components/common/Modal';
 import { Button } from '../components/common/Button';
+import { Pagination } from '../components/common/Pagination';
 import { taskService } from '../services/taskService';
 import { projectService } from '../services/projectService';
 import { teamService } from '../services/teamService';
@@ -21,6 +22,7 @@ export const Tasks: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage] = useState(20);
   const [projects, setProjects] = useState<Project[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 
@@ -54,7 +56,7 @@ export const Tasks: React.FC = () => {
     try {
       const taskFilters: any = {
         page,
-        limit: 20,
+        limit: itemsPerPage,
       };
 
       if (filters.projectId) taskFilters.projectId = filters.projectId;
@@ -65,7 +67,7 @@ export const Tasks: React.FC = () => {
       const response = await taskService.getTasks(taskFilters);
       setTasks(response.tasks);
       setTotalPages(response.totalPages);
-      setCurrentPage(page);
+      setCurrentPage(response.currentPage);
     } catch (error) {
       console.error('Error loading tasks:', error);
     } finally {
@@ -229,19 +231,19 @@ export const Tasks: React.FC = () => {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Tareas</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Tareas</h1>
           <Button onClick={handleCreate}>Crear Tarea</Button>
         </div>
 
         <Card>
-          <h2 className="text-lg font-semibold mb-4">Filtros</h2>
+          <h2 className="text-lg font-semibold mb-4 dark:text-white">Filtros</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Proyecto</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Proyecto</label>
               <select
                 value={filters.projectId}
                 onChange={(e) => handleFilterChange('projectId', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Todos</option>
                 {projects.map((project) => (
@@ -253,11 +255,11 @@ export const Tasks: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
               <select
                 value={filters.status}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Todos</option>
                 {TASK_STATUSES.map((status) => (
@@ -269,11 +271,11 @@ export const Tasks: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prioridad</label>
               <select
                 value={filters.priority}
                 onChange={(e) => handleFilterChange('priority', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Todas</option>
                 {TASK_PRIORITIES.map((priority) => (
@@ -399,27 +401,16 @@ export const Tasks: React.FC = () => {
               </div>
             )}
 
-            {totalPages > 1 && (
-              <div className="flex justify-center gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => loadTasks(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Anterior
-                </Button>
-                <span className="px-4 py-2 text-sm text-gray-700">
-                  Página {currentPage} de {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  onClick={() => loadTasks(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Siguiente
-                </Button>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                loadTasks(page);
+              }}
+              totalItems={totalPages * itemsPerPage}
+              itemsPerPage={itemsPerPage}
+            />
           </>
         )}
       </div>

@@ -60,6 +60,7 @@ export interface ProjectsResponse {
 export interface TasksResponse {
   tasks: Task[];
   totalPages: number;
+  currentPage: number;
 }
 
 export interface TeamMembersResponse {

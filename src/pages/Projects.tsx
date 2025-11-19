@@ -5,6 +5,7 @@ import { ProjectForm } from '../components/projects/ProjectForm';
 import { Modal } from '../components/common/Modal';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
+import { Pagination } from '../components/common/Pagination';
 import { projectService } from '../services/projectService';
 import { Project, ProjectFormData } from '../types';
 
@@ -17,11 +18,12 @@ export const Projects: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [itemsPerPage] = useState(10);
 
   const loadProjects = async (page: number = 1, searchTerm: string = '') => {
     setLoading(true);
     try {
-      const response = await projectService.getProjects(page, 10, searchTerm);
+      const response = await projectService.getProjects(page, itemsPerPage, searchTerm);
       setProjects(response.projects);
       setTotalPages(response.totalPages);
       setCurrentPage(response.currentPage);
@@ -88,7 +90,7 @@ export const Projects: React.FC = () => {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Proyectos</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Proyectos</h1>
           <Button onClick={handleCreate}>Crear Proyecto</Button>
         </div>
 
@@ -103,9 +105,9 @@ export const Projects: React.FC = () => {
         </form>
 
         {loading ? (
-          <div className="text-center text-gray-600">Cargando proyectos...</div>
+          <div className="text-center text-gray-600 dark:text-gray-400">Cargando proyectos...</div>
         ) : projects.length === 0 ? (
-          <div className="text-center text-gray-500 py-12">
+          <div className="text-center text-gray-500 dark:text-gray-400 py-12">
             No hay proyectos disponibles
           </div>
         ) : (
@@ -121,27 +123,16 @@ export const Projects: React.FC = () => {
               ))}
             </div>
 
-            {totalPages > 1 && (
-              <div className="flex justify-center gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => loadProjects(currentPage - 1, search)}
-                  disabled={currentPage === 1}
-                >
-                  Anterior
-                </Button>
-                <span className="px-4 py-2 text-sm text-gray-700">
-                  Página {currentPage} de {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  onClick={() => loadProjects(currentPage + 1, search)}
-                  disabled={currentPage === totalPages}
-                >
-                  Siguiente
-                </Button>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                loadProjects(page, search);
+              }}
+              totalItems={totalPages * itemsPerPage}
+              itemsPerPage={itemsPerPage}
+            />
           </>
         )}
       </div>

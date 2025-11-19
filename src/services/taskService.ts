@@ -1,5 +1,6 @@
 import api from './api';
 import { Task, TaskFormData, UpdateTaskData, TasksResponse, TaskStatus } from '../types';
+import { apiToFrontend } from '../utils/apiTransform';
 
 interface TaskFilters {
   projectId?: string;
@@ -21,13 +22,15 @@ export const taskService = {
     if (filters.page) params.append('page', filters.page.toString());
     if (filters.limit) params.append('limit', filters.limit.toString());
 
-    const response = await api.get<TasksResponse>(`/tasks?${params}`);
-    return response.data;
+      const response = await api.get<any>(`/tasks?${params}`);
+      // Transformar snake_case a camelCase
+      return apiToFrontend<TasksResponse>(response.data);
   },
 
   async getTask(id: string): Promise<Task> {
-    const response = await api.get<Task>(`/tasks/${id}`);
-    return response.data;
+    const response = await api.get<any>(`/tasks/${id}`);
+    // Transformar snake_case a camelCase
+    return apiToFrontend<Task>(response.data);
   },
 
   async createTask(data: TaskFormData): Promise<Task> {
@@ -72,8 +75,9 @@ export const taskService = {
     console.log('Enviando payload a la API:', JSON.stringify(payload, null, 2));
     
     try {
-      const response = await api.post<Task>('/tasks', payload);
-      return response.data;
+      const response = await api.post<any>('/tasks', payload);
+      // Transformar snake_case a camelCase
+      return apiToFrontend<Task>(response.data);
     } catch (error: any) {
       console.error('Error en createTask:', error);
       console.error('Response data:', error.response?.data);
@@ -113,13 +117,15 @@ export const taskService = {
       payload.assigned_to = null;
     }
     
-    const response = await api.put<Task>(`/tasks/${id}`, payload);
-    return response.data;
+    const response = await api.put<any>(`/tasks/${id}`, payload);
+    // Transformar snake_case a camelCase
+    return apiToFrontend<Task>(response.data);
   },
 
   async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-    const response = await api.patch<Task>(`/tasks/${id}/status`, { status });
-    return response.data;
+    const response = await api.patch<any>(`/tasks/${id}/status`, { status });
+    // Transformar snake_case a camelCase
+    return apiToFrontend<Task>(response.data);
   },
 
   async deleteTask(id: string): Promise<void> {
