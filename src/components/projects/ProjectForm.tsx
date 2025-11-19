@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
-import { ProjectFormData, ProjectStatus, Project } from '../../types';
+import { ProjectFormData, Project } from '../../types';
 import { PROJECT_STATUSES } from '../../utils/constants';
 
 interface ProjectFormProps {

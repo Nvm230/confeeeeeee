@@ -9,7 +9,7 @@ import { projectService } from '../services/projectService';
 import { usePolling } from '../hooks/usePolling';
 import { useNotifications } from '../hooks/useNotifications';
 import { exportToCSV } from '../utils/csvExport';
-import { Task, Project } from '../types';
+import { Task } from '../types';
 
 export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState({

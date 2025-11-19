@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Card } from './Card';
 import { Input } from './Input';
 import { Project, Task } from '../../types';
 import { projectService } from '../../services/projectService';

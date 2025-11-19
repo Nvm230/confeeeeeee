@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
-import { TaskFormData, Task, TaskPriority, Project, TeamMember } from '../../types';
+import { TaskFormData, Task, Project, TeamMember } from '../../types';
 import { TASK_PRIORITIES } from '../../utils/constants';
 import { projectService } from '../../services/projectService';
 import { teamService } from '../../services/teamService';

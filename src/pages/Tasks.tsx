@@ -6,7 +6,6 @@ import { TaskCard } from '../components/tasks/TaskCard';
 import { TaskForm } from '../components/tasks/TaskForm';
 import { Modal } from '../components/common/Modal';
 import { Button } from '../components/common/Button';
-import { Input } from '../components/common/Input';
 import { taskService } from '../services/taskService';
 import { projectService } from '../services/projectService';
 import { teamService } from '../services/teamService';

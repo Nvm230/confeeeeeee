@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Layout } from '../components/common/Layout';
 import { Card } from '../components/common/Card';
-import { Button } from '../components/common/Button';
 import { projectService } from '../services/projectService';
-import { Project, Task } from '../types';
+import { Project } from '../types';
 
 export const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
