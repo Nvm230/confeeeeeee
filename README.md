@@ -93,15 +93,21 @@ Los archivos se generarán en la carpeta `dist/`.
 ```
 src/
 ├── components/
-│   ├── common/          # Componentes reutilizables (Button, Input, Modal, Card, Layout)
+│   ├── common/          # Componentes reutilizables (Button, Input, Modal, Card, Layout, SearchGlobal)
 │   ├── auth/            # Componentes de autenticación (LoginForm, RegisterForm)
 │   ├── projects/        # Componentes de proyectos (ProjectCard, ProjectForm)
 │   └── tasks/           # Componentes de tareas (TaskCard, TaskForm)
 ├── pages/               # Páginas principales (Dashboard, Projects, Tasks, Team, etc.)
 ├── services/            # Servicios API (authService, projectService, taskService, teamService)
-├── context/             # Context API (AuthContext)
+├── context/             # Context API (AuthContext, ThemeContext)
+├── hooks/               # Custom hooks (usePolling, useNotifications)
 ├── types/               # Definiciones de tipos TypeScript
-└── utils/               # Utilidades y constantes
+└── utils/               # Utilidades y constantes (csvExport, apiTransform)
+
+Configuración de Deploy:
+├── railway.json         # Configuración de Railway
+├── nixpacks.toml        # Configuración de Nixpacks (Railway)
+└── package.json         # Scripts de build y start
 ```
 
 ## API Base URL
@@ -120,25 +126,89 @@ Authorization: Bearer <jwt_token>
 
 Puedes crear una cuenta nueva usando el formulario de registro en la aplicación. No se proporcionan credenciales de prueba pre-configuradas.
 
-## Deploy
+## Deploy en Railway
 
-El proyecto puede ser desplegado en cualquier plataforma que soporte aplicaciones React/Vite como:
-- Vercel
-- Netlify
-- Railway
-- Render
+El proyecto está configurado para desplegarse fácilmente en Railway.
 
-Para desplegar en Vercel:
-```bash
-npm install -g vercel
-vercel
-```
+### Opción 1: Deploy desde GitHub (Recomendado)
+
+1. **Haz push de tu código a GitHub**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin <tu-repositorio-github>
+   git push -u origin main
+   ```
+
+2. **Conecta Railway con GitHub**
+   - Ve a [Railway](https://railway.app)
+   - Inicia sesión o crea una cuenta
+   - Click en "New Project"
+   - Selecciona "Deploy from GitHub repo"
+   - Elige tu repositorio
+
+3. **Configuración Automática**
+   - Railway detectará automáticamente el proyecto
+   - Ejecutará `npm run build` para construir
+   - Ejecutará `npm start` para iniciar el servidor
+   - La app estará disponible en una URL proporcionada por Railway
+
+### Opción 2: Deploy desde Railway CLI
+
+1. **Instala Railway CLI**
+   ```bash
+   npm install -g @railway/cli
+   ```
+
+2. **Inicia sesión**
+   ```bash
+   railway login
+   ```
+
+3. **Inicializa el proyecto**
+   ```bash
+   railway init
+   ```
+
+4. **Despliega**
+   ```bash
+   railway up
+   ```
+
+### Variables de Entorno (Opcional)
+
+Si necesitas cambiar la URL de la API, puedes configurar la variable de entorno:
+
+- **Variable**: `VITE_API_BASE_URL`
+- **Valor**: `https://cs2031-2025-2-hackathon-2-backend-production.up.railway.app/v1`
+
+En Railway:
+1. Ve a tu proyecto
+2. Click en "Variables"
+3. Agrega `VITE_API_BASE_URL` con el valor correspondiente
+
+**Nota**: Railway establece automáticamente el puerto mediante la variable `PORT`, no es necesario configurarla manualmente.
+
+### Otros Servicios de Deploy
+
+El proyecto también puede ser desplegado en:
+
+- **Vercel**: `npm install -g vercel && vercel`
+- **Netlify**: Conecta tu repositorio de GitHub en Netlify
+- **Render**: Similar a Railway, conecta tu repositorio
+
+Para estos servicios, asegúrate de configurar:
+- **Build Command**: `npm run build`
+- **Publish Directory**: `dist`
+- **Start Command**: `npm start` (o usar el servidor estático de su plataforma)
 
 ## Scripts Disponibles
 
 - `npm run dev` - Inicia el servidor de desarrollo
 - `npm run build` - Crea una build de producción
-- `npm run preview` - Previsualiza la build de producción
+- `npm run preview` - Previsualiza la build de producción localmente
+- `npm start` - Inicia el servidor de producción (usa `serve` para servir archivos estáticos)
 - `npm run lint` - Ejecuta el linter
 
 ## Desarrollo
