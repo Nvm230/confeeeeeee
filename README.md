@@ -176,19 +176,28 @@ El proyecto está configurado para desplegarse fácilmente en Railway.
    railway up
    ```
 
-### Variables de Entorno (Opcional)
+### Variables de Entorno
 
-Si necesitas cambiar la URL de la API, puedes configurar la variable de entorno:
+**No se requieren variables de entorno** - El proyecto funciona con valores por defecto.
+
+#### Variable Opcional (solo si necesitas cambiar la URL de la API)
 
 - **Variable**: `VITE_API_BASE_URL`
-- **Valor**: `https://cs2031-2025-2-hackathon-2-backend-production.up.railway.app/v1`
+- **Valor por defecto**: `https://cs2031-2025-2-hackathon-2-backend-production.up.railway.app/v1`
+- **Cuándo configurarla**: Solo si tienes tu propia instancia del backend API
 
-En Railway:
-1. Ve a tu proyecto
-2. Click en "Variables"
-3. Agrega `VITE_API_BASE_URL` con el valor correspondiente
+**Cómo configurarla en Railway**:
+1. Ve a tu proyecto en Railway
+2. Click en **"Variables"** en el menú lateral
+3. Click en **"New Variable"**
+4. Agrega:
+   - **Variable**: `VITE_API_BASE_URL`
+   - **Value**: `https://tu-api-url.com/v1`
+5. Haz un nuevo deploy para que surta efecto
 
 **Nota**: Railway establece automáticamente el puerto mediante la variable `PORT`, no es necesario configurarla manualmente.
+
+**Ver `RAILWAY_ENV.md` para más detalles sobre variables de entorno.**
 
 ### Otros Servicios de Deploy
 

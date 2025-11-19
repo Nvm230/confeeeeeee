@@ -10,6 +10,7 @@ import { ProjectDetail } from './pages/ProjectDetail';
 import { Tasks } from './pages/Tasks';
 import { TaskDetail } from './pages/TaskDetail';
 import { Team } from './pages/Team';
+import { Profile } from './pages/Profile';
 
 function App() {
   return (
@@ -64,6 +65,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Team />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />
